@@ -1,0 +1,16 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+canvas {
+  min-width: 100%;
+  min-height: 100%;
+  width: calc(100vw);
+  height: calc(100vh);
+}
+

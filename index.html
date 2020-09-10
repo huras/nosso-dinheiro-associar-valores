@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATEMÁTICA – Conhecendo o nosso dinheiro - Nível 1</title>
+
+  <link rel="shortcut icon" href="./favicon.ico" />
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="rgba(117, 192, 67, 0.95)">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="rgba(117, 192, 67, 0.95)">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="rgba(117, 192, 67, 0.95)">
+
+</head>
+
+<style>
+  /*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 4 version
+*/
+
+  body {
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  iframe {
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    /* height: calc(100% - 36px); */
+    height: calc(100%);
+    z-index: 10;
+  }
+
+  navbar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 36px;
+    width: 100%;
+
+    background-color: #439043;
+    display: none;
+  }
+
+  .botao-navbar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 2px;
+    margin: 0px 8px;
+  }
+
+  .botao-navbar svg {
+    fill: white;
+    width: 25px;
+    height: 25px;
+  }
+
+  #page-counter {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+  }
+
+  #slider-fullscreen-overlay {
+    z-index: 15;
+    position: absolute;
+    width: 100vw;
+    height: calc(100vh);
+    left: 0;
+    top: 0px;
+    background-color: rgba(117, 192, 67, 0.95);
+    display: none;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: sans-serif;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .iframe-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 24px;
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: sans-serif;
+  }
+
+  .iframe-overlay .msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .iframe-overlay .msg img {
+    width: 45px;
+    height: auto;
+    margin-right: 16px;
+    animation: pulse 2.15s infinite ease-out;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: rotateZ(-10deg) scale(1);
+    }
+
+    25% {
+      transform: rotateZ(0deg) scale(1.2);
+    }
+
+    50% {
+      transform: rotateZ(15deg) scale(1);
+    }
+
+    75% {
+      transform: rotateZ(0deg) scale(1.2);
+    }
+
+    100% {
+      transform: rotateZ(-10deg) scale(1);
+    }
+  }
+
+  .invisible {
+    display: none !important;
+  }
+</style>
+
+<body style='background-color: black;'>
+  <navbar>
+    <div class='left-side'>
+      <div class='botao-navbar' onclick='previousPage()' id='prev-btn'>
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-left"
+          class="svg-inline--fa fa-arrow-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512">
+          <path
+            d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z">
+          </path>
+        </svg>
+      </div>
+    </div>
+
+    <span id='page-counter' onclick="testeHure()"> Página - de - </span>
+
+    <div class='botao-navbar' onclick='nextPage()'>
+      <svg style='transform: scaleX(-1);' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-left"
+        id='next-btn' class="svg-inline--fa fa-arrow-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 448 512">
+        <path
+          d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z">
+        </path>
+      </svg>
+    </div>
+  </navbar>
+  <div class='iframe-overlay '>
+    <div class='msg'>
+      <!-- <img src="./img/female_teacher_head.png" alt=""> -->
+      <img id='brenda-head' src="./img/loader/brenda-head.png" alt="">
+      <img id='zeca-head' src="./img/loader/zeca-head.png" alt="">
+      <img id='lucia-head' src="./img/loader/lucia-head.png" alt="">
+      <span>
+        Carregando...
+      </span>
+    </div>
+  </div>
+  <iframe id='frame' src="" frameborder="0" referrerpolicy='same-origin' allowfullscreen="true">
+  </iframe>
+  <div id='slider-fullscreen-overlay' class='invisiblea' style="display: none;">
+    <div> Toque aqui para </div>
+    <div> ativar a tela cheia </div>
+  </div>
+
+  <!-- <script src="../../src/babel/PageSlider.js"></script> -->
+  <script src="src/babel/PageSlider.js"></script>
+</body>
+
+</html>
