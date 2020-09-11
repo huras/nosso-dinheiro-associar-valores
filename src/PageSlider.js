@@ -1,13 +1,13 @@
-var currentPage = 0;
+var currentPage = 1;
 var historico = [
-  // {
-  //   url: './Cenas/Stage1',
-  //   rotation: "portrait-primary",
-  //   // type: 'animation'
-  // }
 
   {
     url: './Cenas/Menu/index.html',
+    rotation: "landscape-primary",
+    // type: 'animation'
+  },
+  {
+    url: './Cenas/Stage1/index.html',
     rotation: "landscape-primary",
     // type: 'animation'
   }

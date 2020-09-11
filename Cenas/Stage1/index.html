@@ -45,7 +45,7 @@
         </div>
 
         <div class='lado-inferior '>
-          <div class='money-pieces clip-inside'>
+          <div class='money-pieces clip-inside animated noInteraction'>
             <img src="../../img/game/n-50.png" class="nota n-50">
             <img src="../../img/game/n-5.png" class="nota n-5">
             <img src="../../img/game/n-10.png" class="nota n-50">
@@ -54,71 +54,18 @@
             <img src="../../img/game/10cents.png" class="coin v1">
           </div>
 
-          <div class="digits clip-inside">
+          <template id='alternativa'>
             <div class="key-line alternativa alt-1">
               <div class="key" onclick="jogada(5.55)">
-                <div class="noInteraction">
+                <div class="value-wrapper noInteraction">
                   R$ 5,55
                 </div>
               </div>
             </div>
-            <div class="key-line alternativa alt-2">
-              <div class="key" onclick="jogada(61.0)">
-                <div class="noInteraction">
-                  R$ 61,00
-                </div>
-              </div>
-            </div>
-            <div class="key-line alternativa alt-3">
-              <div class="key" onclick="jogada(7.25)">
-                <div class="noInteraction">
-                  R$ 7,25
-                </div>
-              </div>
-            </div>
-            <div class="key-line alternativa alt-4">
-              <div class="key" onclick="jogada(6.50)">
-                <div class="noInteraction">
-                  R$ 6,50
-                </div>
-              </div>
-            </div>
+          </template>
+          <div id='alternativas-target' class="animated digits clip-inside ">
           </div>
         </div>
-
-        <div class="moedas" style='display: none;'>
-          <div valor="50" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <img src="../../img/game/50cents.png" class="v50" alt=""></div>
-          <div valor="100" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <img src="../../img/game/1conto.png" class="v1" alt=""></div>
-        </div>
-
-        <div class="moedas" style='display: none;'>
-          <div valor="5" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)"><img
-              src="../../img/game/5cents.png" class="v5" alt=""></div>
-          <div valor="10" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <img src="../../img/game/10cents.png" class="v10" alt=""></div>
-          <div valor="25" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <img src="../../img/game/25cents.png" class="v25" alt=""></div>
-        </div>
-
-        <template id="cofrinho">
-          <div class="cofrinho">
-            <div class="placa noInteraction">
-              <div class="total">R$ 10,00</div>
-              <div class="regra">
-                <div>Só moedas de:</div>
-                <div class="valor">R$ 1,00</div>
-              </div>
-              <img class="correto" src="../../img/game/ui_certo.png" />
-            </div>
-            <div class="pigdrop" posicaoPorquinho="0" ondrop="drop(event)" ondragover="allowDrop(event)"><img
-                src="../../img/game/pig.png" alt="" class="pig"></div>
-            <div class="coin-slot">
-              <div class='coins-inside noInteraction'></div>
-            </div>
-          </div>
-        </template>
 
       </div>
 
@@ -262,19 +209,8 @@
   <audio preload="automatic" id="SFX-wrongAnswer" muted>
     <source src="../../audio/sfx_alarm_loop3-wrong.wav" type="audio/wav" />
   </audio>
-  <audio preload="automatic" id="enunciado" muted>
-    <source src="../../audio/enunciado.ogg" type="audio/ogg" />
-  </audio>
   <audio preload="automatic" id="ingame-enunciado" muted>
     <source src="../../audio/ingame-enunciado.ogg" type="audio/ogg" />
-  </audio>
-
-
-  <audio preload="automatic" id="SFX-engineLoop1" muted>
-    <source src="../../audio/sfx_vehicle_engineloop-rocket_engine.wav" type="audio/mp3" />
-  </audio>
-  <audio preload="automatic" id="SFX-engineLoop2" muted>
-    <source src="../../audio/sfx_vehicle_engineloop-rocket_engine.wav" type="audio/mp3" />
   </audio>
 
   <!-- <audio preload="automatic" id="OST-naka" muted>

@@ -11,6 +11,10 @@ body {
   background-clip: border-box;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .interactableHUD {
   display: flex;
   justify-content: space-between;
@@ -791,7 +795,7 @@ body.mobile .conta {
   border-radius: 5px;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 

@@ -50,7 +50,7 @@ function dragStart(ev) {
   if (window.mobileAndTabletCheck()) {
     const img = new Image();
     img.src = ev.target.querySelector('img').getAttribute('src');
-    ev.dataTransfer.setDragImage(img, 25, 25);
+    ev.dataTransfer.setDragImage(img, 35, 35);
   }
 }
 
@@ -84,7 +84,7 @@ function loadPreviousStageData(dados) {
         engine.repescagens = loadedData.repescagens + 1;
       }
 
-      var maxJogadas = 2
+      var maxJogadas = repescagens.length - 1;
       document.getElementById('vezes-r').innerHTML = (maxJogadas - engine.repescagens);
       if (engine.repescagens >= maxJogadas) {
         document.getElementById('btn-repescar').style.display = 'none';
@@ -96,98 +96,17 @@ function loadPreviousStageData(dados) {
 }
 
 // =================================================== Engine Base
-const regra1 = (moeda, cofre) => {
 
-  if (cofre.moedasPermitidas.indexOf(moeda) == -1) {
-
-    engine.heartHUD.applyDamage(1);
-    engine.heartHUD.updateHUD();
-
-    mostraCertoOuErrado(false)
-    engine.onErrarQuestao(moeda, cofre.moedasPermitidas, cofre.espacoMaximo)
-
-
-  } else {
-    var totalAtual = 0;
-    cofre.moedasDentro.map(item => {
-      totalAtual += item;
-    });
-
-    if ((moeda + totalAtual) > cofre.espacoMaximo) {
-      engine.onVacilarResposta()
-    }
-    else {
-      engine.onAcertarQuestao(moeda, cofre.moedasPermitidas, cofre.espacoMaximo)
-      mostraCertoOuErrado(true)
-      cofre.moedasDentro.push(moeda)
-
-      const coinTarget = cofre.element.querySelector('.coins-inside');
-      const newCoin = document.createElement('div');
-      var coinVal = moeda;
-      if (coinVal > 99) {
-        coinVal /= 100;
-      }
-      newCoin.innerHTML = coinVal;
-      newCoin.classList.add('coin');
-      newCoin.classList.add('m-' + moeda);
-      coinTarget.appendChild(newCoin);
-
-      regra2(moeda, cofre)
-    }
-  }
-}
-
-
-const regra2 = (moeda, cofre) => {
-
-  var totalAtual = 0;
-  cofre.moedasDentro.map(item => {
-    totalAtual += item;
-  });
-
-
-  if (totalAtual == cofre.espacoMaximo) {
-    cofre.concluido = true
-    cofre.element.classList.add('porquinhoPronto')
-    //renderi\zar porco conluido
-    regra6(cofre)
-  }
-}
-
-const regra6 = (cofre) => {
-  var porcosAtual = rodadas[rodadaAtual];
-  var porcosProntos = 0
-
-  porcosAtual.map((porco) => {
-    if (porco.concluido == true) {
-      porcosProntos += 1
-    }
-  })
-
-  if (porcosProntos == porcosAtual.length) {
-    rodadaAtual++;
-    setTimeout(() => {
-      document.querySelector('.cofres').classList.add('rolarDireita')
-    }, 2500)
-
-    setTimeout(() => {
-      if (rodadaAtual >= rodadas.length) {
-        engine.onWinGame();
-      } else {
-        montarRodada(rodadas[rodadaAtual]);
-        document.querySelector('.cofres').classList.remove('rolarDireita')
-      }
-    }, 3500)
-
-    console.log(rodadaAtual)
-  }
+const jogada = (valor) => {
+  engine.onDarResposta(valor)
 }
 
 // =================================================== Engine Base
 
 const drawColliders = false;
 const debugEngine = false;
-const revivePrice = 30;
+const revivePrice = 1;
+var revives = 3;
 var engineLife = 0;
 
 const canvas = document.getElementById("canvas");
@@ -391,45 +310,8 @@ class GameEngine {
 
     this.arcadeObjs = [];
 
-    this.perguntas = [
-      {
-        q: '42 - 22 =', //questão
-        r: 20,         //resposta
-        o: [28, 18, 24, 19]
-      },
-      {
-        q: '31 - 19 =',
-        r: 12,
-        o: [10, 11, 15, 8]
-      },
-      {
-        q: '46 - 30 =',
-        r: 16,
-        o: [12, 11, 14, 10]
-      },
-      {
-        q: '30 - 15 =',
-        r: 15,
-        o: [13, 19, 20, 7]
-      },
-      {
-        q: '55 - 23 =',
-        r: 32,
-        o: [30, 34, 28, 42]
-      },
-      {
-        q: '40 - 14 =',
-        r: 26,
-        o: [22, 24, 28, 18]
-      },
-    ];
-
-    // this.perguntas = shuffle(this.perguntas);
-    // this.perguntas.splice(6, 4);
-    this.perguntaAtual = 0;
-
     // === Set HUD
-    this.crystalCounter = new HUDCounter(60, 'txt_qtd-moedas');
+    this.crystalCounter = new HUDCounter(revives, 'txt_qtd-moedas');
     this.frag = new FragManager();
     this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3'], args => { onGameOver() }, 3); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
     this.contaHUD = new ContaHUD({ selector: '#continha' });
@@ -438,25 +320,25 @@ class GameEngine {
     document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
 
     // === Eventos importantes no jogo
-    this.onDarResposta = (resposta) => {
+    this.onDarResposta = (respostaDada) => {
 
-      var ret = engine.contaHUD.checaConta(resposta)
+      var ret = this.contaHUD.conta.resposta == respostaDada;
       if (ret) {
-        this.onAcertarQuestao(resposta, this.contaHUD.conta.r, this.contaHUD.conta.q)
+        this.onAcertarQuestao(respostaDada, this.contaHUD.conta.resposta, this.contaHUD.conta.valores)
       } else {
-        this.onErrarQuestao(resposta, this.contaHUD.conta.r, this.contaHUD.conta.q)
+        this.onErrarQuestao(respostaDada, this.contaHUD.conta.resposta, this.contaHUD.conta.valores)
       }
 
       return ret
     }
 
-    this.onLoadPergunta = () => {
-      this.contaHUD.setOp(this.perguntas[this.perguntaAtual])
+    this.onLoadPergunta = (pergunta) => {
+      this.contaHUD.setOp(pergunta)
 
-      var pergunta = JSON.parse(JSON.stringify(this.perguntas[this.perguntaAtual]));
+      // var pergunta = JSON.parse(JSON.stringify(this.perguntas[this.perguntaAtual]));
 
-      pergunta.o.push(pergunta.r)
-      pergunta.o = shuffle(pergunta.o)
+      // pergunta.o.push(pergunta.r)
+      // pergunta.o = shuffle(pergunta.o)
     }
 
     this.onVacilarResposta = () => {
@@ -475,11 +357,29 @@ class GameEngine {
         answerGiven: answerGiven
       });
 
+      mostraCertoOuErrado(true)
+
       if (sounds.sfx.rightAnswer) { // Dá play num som
         sounds.sfx.rightAnswer.currentTime = 0;
         sounds.sfx.rightAnswer.play();
         sounds.sfx.rightAnswer.muted = false;
       }
+
+      setTimeout(() => {
+        document.querySelector('.money-pieces').classList.add('rolarEsquerda')
+        document.querySelector('#alternativas-target').classList.add('rolarDireita')
+      }, 2500)
+
+      rodadaAtual++;
+      setTimeout(() => {
+        if (rodadaAtual >= rodadas.length) {
+          engine.onWinGame();
+        } else {
+          montaPergunta(rodadas[rodadaAtual]);
+          document.querySelector('.money-pieces').classList.remove('rolarEsquerda')
+          document.querySelector('#alternativas-target').classList.remove('rolarDireita')
+        }
+      }, 3500)
     }
     this.onErrarQuestao = (answerGiven, rightAnswer, questionString, removeLife = true) => {
       this.frag.incluirErro({
@@ -487,6 +387,11 @@ class GameEngine {
         rightAnswer: rightAnswer,
         answerGiven: answerGiven
       });
+
+      mostraCertoOuErrado(false)
+
+      engine.heartHUD.applyDamage(1);
+      engine.heartHUD.updateHUD();
 
       if (sounds.sfx.wrongAnswer) { // Dá play num som
         sounds.sfx.wrongAnswer.currentTime = 0;
@@ -568,6 +473,8 @@ class GameEngine {
     this.onWinGame = () => {
       document.querySelector('.result-screen').style.display = 'flex'; //Exibe a tela de resultado
 
+      document.querySelector('.rodada').classList.add('hidden');
+
       // var percentage = (this.acertosHUD.slots.length + this.heartHUD.hearts) / (this.acertosHUD.slots.length + this.heartHUD.maxHearts)
       var percentage = this.frag.getPercentage();
       document.querySelector('#nota-final').innerHTML = percentage.toFixed(0) + '%';
@@ -585,6 +492,8 @@ class GameEngine {
       this.heartHUD.recoverDamage(3);
       document.querySelector('.gameover-screen').style.display = 'none'; //Exibe tela de gameover
 
+      document.querySelector('.money-pieces').classList.remove('rolarEsquerda')
+      document.querySelector('#alternativas-target').classList.remove('rolarDireita')
     }
     this.onResetGame = () => {
       // document.querySelector('.result-screen').style.display = 'none'; //Esconde a tela de resultado
@@ -605,10 +514,13 @@ class GameEngine {
       this.closeAllScreens();
       document.querySelector('.menu-screen').style.display = 'flex'; //Esconde tela de menu
     }
+    this.onRepescagem = () => {
+      document.querySelector('.money-pieces').classList.remove('rolarEsquerda')
+      document.querySelector('#alternativas-target').classList.remove('rolarDireita')
+      this.frag.reset();
+    }
 
     // =========================== Filminho inicial   
-
-    this.onLoadPergunta();
   }
 
   update(deltaTime) {
@@ -721,8 +633,6 @@ var sounds = {
     crystalPickup: document.getElementById("SFX-crystalPickup"),
     checkpointPickup: document.getElementById("SFX-checkpointPickup"),
     safiraPickup: document.getElementById("SFX-safiraPickup"),
-    engineloop1: document.getElementById("SFX-engineLoop1"),
-    engineloop2: document.getElementById("SFX-engineLoop2"),
     // nakaOST: document.getElementById("OST-naka"),
     rightAnswer: document.getElementById("SFX-rightAnswer"),
     wrongAnswer: document.getElementById("SFX-wrongAnswer"),
@@ -835,15 +745,17 @@ const escondeCertoErrado = () => {
 //   // })
 // })
 
-var maxJogadas = 2
 var repescadasFeitas = 0
 const montaRepescagem = (repescagem) => {
+  engine.onRepescagem();
   hideScreen('.result-screen')
   rodadaAtual = 0;
-  rodadas = repescagem
-  montarRodada(rodadas[rodadaAtual])
+  rodadas = shuffle(repescagem)
+  montaPergunta(rodadas[rodadaAtual])
 
-  document.getElementById('vezes-r').innerHTML = (maxJogadas - repescadasFeitas);
+  var maxJogadas = repescagens.length - 1;
+  var vezesWrapper = document.getElementById('vezes-r');
+  vezesWrapper.innerHTML = (maxJogadas - repescadasFeitas);
   if (repescadasFeitas >= maxJogadas) {
     document.getElementById('btn-repescar').style.display = 'none';
   }
@@ -851,7 +763,6 @@ const montaRepescagem = (repescagem) => {
 }
 
 const proximaRepescagem = () => {
-
   repescagemAtual++
   montaRepescagem(repescagens[repescagemAtual])
 }
@@ -860,130 +771,151 @@ Math.random();
 
 var repescagemAtual = 0
 var repescagens = shuffle([
-  [ //repescagem 1
-    [//rodada1
-      {
-        moedasPermitidas: [100],
-        moedasDentro: [],
-        espacoMaximo: 1100,
-      },
-      {
-        moedasPermitidas: [10, 5],
-        moedasDentro: [],
-        espacoMaximo: 100,
-      }
-    ],
+  [ //repescagem 0
 
-    [//rodada2
-      {
-        moedasPermitidas: [50, 100],
-        moedasDentro: [],
-        espacoMaximo: 600,
-      },
-      {
-        moedasPermitidas: [100],
-        moedasDentro: [],
-        espacoMaximo: 800,
-      }
-    ],
+    //rodada1
+    {
+      valores: [500, 1000, 50],
+      alternativas: [125, 85, 75, 1250]
+    },
+
+    //rodada2
+    {
+      valores: [500, 1000],
+      alternativas: [1100, 2000, 1500, 1050]
+    },
+
+    //rodada3
+    {
+      valores: [200, 200, 50, 5],
+      alternativas: [375, 455, 475, 500]
+    },
+
+    //rodada4
+    {
+      valores: [50, 10, 500, 5],
+      alternativas: [470, 565, 535, 550]
+    },
+  ],
+
+  [ //repescagem 1
+
+    //rodada1
+    {
+      valores: [200, 1000, 50],
+      alternativas: [1250, 850, 750, 1205]
+    },
+
+    //rodada2
+    {
+      valores: [500, 25, 200],
+      alternativas: [555, 6100, 725, 650]
+    },
+
+    //rodada3
+    {
+      valores: [200, 2000, 10, 10, 25],
+      alternativas: [2245, 2205, 2175, 2155]
+    },
+
+    //rodada4
+    {
+      valores: [1000, 2000, 100, 5],
+      alternativas: [3105, 2590, 2675, 3030]
+    },
+
   ],
 
   [ //repescagem 2
-    [//rodada1
-      {
-        moedasPermitidas: [100, 50],
-        moedasDentro: [],
-        espacoMaximo: 900,
-      },
-      {
-        moedasPermitidas: [50, 25],
-        moedasDentro: [],
-        espacoMaximo: 400,
-      }
-    ],
 
-    [//rodada2
-      {
-        moedasPermitidas: [50],
-        moedasDentro: [],
-        espacoMaximo: 300,
-      },
-      {
-        moedasPermitidas: [100, 25],
-        moedasDentro: [],
-        espacoMaximo: 700,
-      }
-    ],
-  ],
+    //rodada1
+    {
+      valores: [200, 50, 500],
+      alternativas: [555, 6100, 725, 650]
+    },
 
-  [ //repescagem 3
-    [//rodada1
-      {
-        moedasPermitidas: [100, 50],
-        moedasDentro: [],
-        espacoMaximo: 1200,
-      },
-      {
-        moedasPermitidas: [100, 25],
-        moedasDentro: [],
-        espacoMaximo: 600,
-      },
-      {
-        moedasPermitidas: [50, 25],
-        moedasDentro: [],
-        espacoMaximo: 300,
-      }
-    ],
+    //rodada2
+    {
+      valores: [200, 50, 1000],
+      alternativas: [555, 625, 1025, 1250]
+    },
 
-    [//rodada2
-      {
-        moedasPermitidas: [50, 100],
-        moedasDentro: [],
-        espacoMaximo: 900,
-      },
-      {
-        moedasPermitidas: [25],
-        moedasDentro: [],
-        espacoMaximo: 75,
-      }
-    ],
+    //rodada3
+    {
+      valores: [25, 2000, 10, 10, 25],
+      alternativas: [2245, 2205, 2175, 2155]
+    },
+
+    //rodada4
+    {
+      valores: [500, 2000, 100, 5],
+      alternativas: [3105, 3130, 2605, 3030]
+    },
+
   ],
 
 ]);
+
+var letrasPerguntas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 var rodadas = []
 var rodadaAtual = 0
+const baseAddress = '../../';
 
-function montarRodada(porquinhos) {
-
-  porquinhos = shuffle(porquinhos);
-
-  var template = document.getElementById('cofrinho')
-  var target = document.querySelector('.cofres')
-  var rodadaText = document.querySelector('.rodada')
-
-  target.innerHTML = ""
-  target.classList.remove('rolarDireita')
-
-  porquinhos.map((porquinho, position) => {
-    porquinho.concluido = false
-    var clone = template.content.cloneNode(true)
-    clone.querySelector('.pigdrop').setAttribute('posicaoPorquinho', position)
-    clone.querySelector('.regra .valor').innerHTML = ""
-    clone.querySelector('.total').innerHTML = "R$ " + (porquinho.espacoMaximo / 100).toFixed(2).replace('.', ',')
-
-    const moedasTemplate = clone.querySelector('.valor')
-
-    porquinho.moedasPermitidas.map((moeda) => {
-      const moedasConvertidas = (moeda / 100).toFixed(2).replace('.', ',')
-      moedasTemplate.innerHTML += "R$ " + moedasConvertidas + " e "
-    })
-    moedasTemplate.innerHTML = moedasTemplate.innerHTML.substr(0, moedasTemplate.innerHTML.length - 2)
-    target.appendChild(clone)
+function montaPergunta(pergunta) {
+  pergunta.resposta = pergunta.valores.reduce((acc, val) => {
+    return acc += val;
   })
-  rodadaText.innerHTML = "Rodada " + (rodadaAtual + 1)
-}
+  if (pergunta.alternativas.indexOf(pergunta.resposta) == -1) {
+    pergunta.alternativas[0] = pergunta.resposta;
+  }
 
-montaRepescagem(repescagens[0])
+  var target = document.querySelector('#alternativas-target');
+  target.innerHTML = "";
+  target.classList.remove('rolarDireita');
+
+  const template = document.getElementById('alternativa');
+  pergunta.alternativas = shuffle(pergunta.alternativas);
+  pergunta.alternativas = shuffle(pergunta.alternativas);
+  pergunta.alternativas.map((alternativa, i) => {
+
+    var clone = template.content.cloneNode(true);
+    clone.querySelector('.value-wrapper').innerHTML = letrasPerguntas[i] + ') R$ ' + (alternativa / 100).toFixed(2).replace('.', ',');
+    clone.querySelector('.key').onclick = () => {
+      jogada(alternativa);
+    }
+
+    target.appendChild(clone);
+  })
+
+  var rodadaText = document.querySelector('.rodada');
+  rodadaText.classList.remove('hidden');
+  rodadaText.innerHTML = "Rodada " + (rodadaAtual + 1) + " de " + rodadas.length;
+
+  var cashTarget = document.querySelector('.money-pieces');
+  cashTarget.innerHTML = "";
+
+  pergunta.valores = shuffle(pergunta.valores);
+  pergunta.valores = pergunta.valores.sort((a, b) => {
+    return a > b ? -1 : a < b ? 1 : 0;
+  })
+  pergunta.valores.map(valor => {
+    const el = document.createElement('img')
+
+
+    if (valor <= 100) { // moeda
+      el.setAttribute('src', baseAddress + 'img/game/' + valor + 'cents.png');
+      el.classList.add('coin');
+      el.classList.add('v' + valor);
+    } else { //nota
+      el.setAttribute('src', baseAddress + 'img/game/n-' + (valor / 100) + '.png');
+      el.classList.add('nota');
+    }
+
+    cashTarget.appendChild(el);
+  })
+
+  engine.onLoadPergunta(pergunta);
+}
 
 const showHUDs = () => {
   const noInteractionHud = document.querySelector('.noInteractionHUD');
@@ -1005,4 +937,5 @@ sheetLoader.loadSheetQueue(() => {
 
   engine.start();
   engine.onLoadStage(1)
+  montaRepescagem(repescagens[0])
 });

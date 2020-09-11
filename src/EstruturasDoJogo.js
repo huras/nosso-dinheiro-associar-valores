@@ -1587,14 +1587,17 @@ class DistanceSteper {
 }
 
 class ContaHUD {
-  constructor(options) {
-    this.element = document.querySelector(options.selector);
+  constructor(options = {}) {
+    if (options.selector)
+      this.element = document.querySelector(options.selector);
   }
 
   setOp(conta) {
-    console.log(conta, this.element)
+    if (this.element) {
+      this.element.innerHTML = conta.q;
+    }
 
-    this.element.innerHTML = conta.q;
+    // console.log(conta, this.element)
     this.conta = conta;
   }
 
