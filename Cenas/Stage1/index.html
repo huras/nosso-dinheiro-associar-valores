@@ -9,6 +9,8 @@
 
   <link rel="stylesheet" href="../../css/canvasDefault.css">
   <link rel="stylesheet" href="../../css/HUD.css">
+  <link rel="stylesheet" href="../../css/game.css">
+
   <style>
     .fundo-money {
       background-image: url(../../img/game/fundo50reais.png);
@@ -17,11 +19,8 @@
   </style>
 </head>
 
-
-<body class='fundo-money'>
+<body class='fundo-money' style='animation: vai-vem 300s infinite linear;'>
   <script src="../../src/babel/bundle.js"></script>
-
-
 
   <div class='interactableHUD' style='display: none;'>
     <div class="certo-ou-errado noInteraction">
@@ -31,15 +30,70 @@
     </div>
 
     <div class="background">
-      <div class="hudCentro clip-inside">
+      <div class="hudCentro ">
 
-        <div class="moedas">
+        <div class="lado-superior clip-inside">
+          <div class="visor">
+            <div class="digito" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="digito" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="sep">
+              <div>,</div>
+            </div>
+            <div class="digito" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="digito" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+          </div>
+        </div>
+
+        <div class='lado-inferior '>
+          <div class='money-pieces clip-inside'>
+            <img src="../../img/game/n-50.png" class="nota n-50">
+            <img src="../../img/game/n-5.png" class="nota n-5">
+            <img src="../../img/game/n-10.png" class="nota n-50">
+            <img src="../../img/game/n-20.png" class="nota n-5">
+            <img src="../../img/game/25cents.png" class="coin v1">
+            <img src="../../img/game/10cents.png" class="coin v1">
+          </div>
+
+          <div class="digits clip-inside">
+            <div class="key-line alternativa alt-1">
+              <div class="key" onclick="jogada(5.55)">
+                <div class="noInteraction">
+                  R$ 5,55
+                </div>
+              </div>
+            </div>
+            <div class="key-line alternativa alt-2">
+              <div class="key" onclick="jogada(61.0)">
+                <div class="noInteraction">
+                  R$ 61,00
+                </div>
+              </div>
+            </div>
+            <div class="key-line alternativa alt-3">
+              <div class="key" onclick="jogada(7.25)">
+                <div class="noInteraction">
+                  R$ 7,25
+                </div>
+              </div>
+            </div>
+            <div class="key-line alternativa alt-4">
+              <div class="key" onclick="jogada(6.50)">
+                <div class="noInteraction">
+                  R$ 6,50
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="moedas" style='display: none;'>
           <div valor="50" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
             <img src="../../img/game/50cents.png" class="v50" alt=""></div>
           <div valor="100" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
             <img src="../../img/game/1conto.png" class="v1" alt=""></div>
         </div>
-        <div class="moedas">
+
+        <div class="moedas" style='display: none;'>
           <div valor="5" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)"><img
               src="../../img/game/5cents.png" class="v5" alt=""></div>
           <div valor="10" class="moedrag" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
@@ -66,75 +120,9 @@
           </div>
         </template>
 
-
-        <div class="rodadaEcofre">
-          <div class="cofres "></div>
-        </div>
-
       </div>
 
-      <div class="rodada noInteraction"></div>
-    </div>
-
-    <div class="conta" style="display: none;">
-      <div id="continha"></div>
-      <div class="local-resp cor1" ondrop="drop(event)" ondragover="allowDrop(event)"> </div>
-    </div>
-
-    <div class="bandeja-num" style="display: none;">
-      <div class="opicao">
-        <div class="cor1" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          1
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor2" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          2
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor3" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          3
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor4" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          4
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor5" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          5
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor6" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          6
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor7" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          7
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor8" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          8
-        </div>
-      </div>
-
-      <div class="opicao">
-        <div class="cor9" draggable="true" ondragstart="drag(event)" ondragend="dragexit(event)">
-          9
-        </div>
-      </div>
+      <div class="rodada noInteraction">rodada 1</div>
     </div>
 
     <div class="enunciado">
@@ -148,7 +136,7 @@
         </svg>
       </div>
       <span>
-        ARRASTE PARA CADA COFRINHO A QUANTIDADE DE MOEDAS CORRESPONDENTE AO VALOR INDICADO.
+        OBSERVE AS CÉDULAS E AS MOEDAS E DEPOIS CLIQUE NA SOMA TOTAL DO DINHEIRO:
       </span>
     </div>
 
