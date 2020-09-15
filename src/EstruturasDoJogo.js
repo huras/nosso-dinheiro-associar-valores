@@ -1610,12 +1610,10 @@ class ContaHUD {
   }
 }
 
+// ========================================================= HUDs
 
+class CertoErradoVaciloHUD {
+  constructor(args) {
 
-
-
-
-
-
-// 10:46
-// R$ 4,20 / h
+  }
+}

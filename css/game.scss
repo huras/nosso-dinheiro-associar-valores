@@ -303,14 +303,14 @@
     background-color: #003a00dc;
     border: solid 4px #9fd37c;
     border-radius: 5px;
-    padding: 16px 16px;
+    padding: 16px 2px;
     max-height: 66vh;
     height: 100%;
-    width: 30%;
+    width: 33%;
 
     @media (max-width: 900px) {
       border: solid 2px #9fd37c;
-      padding: 0px 16px;
+      padding: 0px 2px;
     }
 
     .key-line {
@@ -323,7 +323,7 @@
         color: white;
         font-family: sans-serif;
         border: 3px solid #7c90d3;
-        font-size: 36px;
+        font-size: 28px;
         font-weight: bold;
         padding: 4px 12px;
         line-height: 1.3;

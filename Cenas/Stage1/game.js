@@ -322,6 +322,9 @@ class GameEngine {
     // === Eventos importantes no jogo
     this.onDarResposta = (respostaDada) => {
 
+      if (this.hasLoadedNextQuestion == false)
+        return;
+
       var ret = this.contaHUD.conta.resposta == respostaDada;
       if (ret) {
         this.onAcertarQuestao(respostaDada, this.contaHUD.conta.resposta, this.contaHUD.conta.valores)
@@ -371,6 +374,7 @@ class GameEngine {
       }, 2500)
 
       rodadaAtual++;
+      this.hasLoadedNextQuestion = false;
       setTimeout(() => {
         if (rodadaAtual >= rodadas.length) {
           engine.onWinGame();
@@ -378,6 +382,7 @@ class GameEngine {
           montaPergunta(rodadas[rodadaAtual]);
           document.querySelector('.money-pieces').classList.remove('rolarEsquerda')
           document.querySelector('#alternativas-target').classList.remove('rolarDireita')
+          this.hasLoadedNextQuestion = true;
         }
       }, 3500)
     }
