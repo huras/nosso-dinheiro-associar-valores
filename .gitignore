@@ -15,4 +15,3 @@ yarn-error.log
 /public/mix-manifest.json
 **/transpiled*
 **/babel/*
-**/*.ai
