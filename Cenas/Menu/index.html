@@ -1,203 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Animation Player </title>
-  <link rel="stylesheet" href="../../css/HUD.css">
-  <style>
-    body {
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-    }
-
-    @media (max-width: 768px) {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animation Player</title>
+    <link rel="stylesheet" href="../../css/HUD.css" />
+    <style>
       body {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin: 0;
       }
 
-      canvas {
-        width: calc(100vw);
-        height: calc(100vh);
-      }
-    }
+      @media (max-width: 768px) {
+        body {
+          margin: 0;
+        }
 
-    .play {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.589);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 777;
-
-      flex-direction: column;
-    }
-
-    .play svg {
-      fill: white;
-      width: 10vw;
-      transform: scaleX(1.1);
-      height: auto;
-      margin-bottom: 32px;
-      animation: pulse 2.5s infinite ease-in-out;
-    }
-
-    .play .texto {
-      font-weight: 700;
-      font-size: 24px;
-      font-family: sans-serif;
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1.0);
+        canvas {
+          width: calc(100vw);
+          height: calc(100vh);
+        }
       }
 
-      35% {
-        transform: scale(1.4);
+      .play {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.589);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 777;
+
+        flex-direction: column;
       }
 
-      100% {
-        transform: scale(1.0);
-      }
-    }
-
-    #nextPage {
-      display: flex;
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      animation: pulse2 2s infinite ease-in-out;
-      display: none;
-    }
-
-    @keyframes pulse2 {
-      0% {
-        transform: scale(1.2);
+      .play svg {
+        fill: white;
+        width: 10vw;
+        transform: scaleX(1.1);
+        height: auto;
+        margin-bottom: 32px;
+        animation: pulse 2.5s infinite ease-in-out;
       }
 
-      45% {
-        transform: scale(1.5);
+      .play .texto {
+        font-weight: 700;
+        font-size: 24px;
+        font-family: sans-serif;
       }
 
-      100% {
-        transform: scale(1.2);
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+
+        35% {
+          transform: scale(1.4);
+        }
+
+        100% {
+          transform: scale(1);
+        }
       }
-    }
-  </style>
-</head>
 
-<body>
-  <script src="../../src/babel/bundle.js"></script>
-  <div class='play' onclick="playMovie()">
-    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14"
-      role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-      <path
-        d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z">
-      </path>
-    </svg>
-    <div class='texto'> Iniciar</div>
-  </div>
+      #nextPage {
+        display: flex;
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        animation: pulse2 2s infinite ease-in-out;
+        display: none;
+      }
 
-  <div id="btn-instru" onclick="instrucoes(1)">
-    <span class="noInteraction">
-      instruções
-    </span>
-  </div>
+      @keyframes pulse2 {
+        0% {
+          transform: scale(1.2);
+        }
 
-  <div class="interactableHUD">
-    <div class='instruction-page1-screen instruction-screen' style='display: none;'>
-      <img src="../../img/instructions/page1.png" style='max-width: 95%;' class='instru-pic'>
+        45% {
+          transform: scale(1.5);
+        }
 
-      <div class='dflex flex-column'
-        style='width: 100%; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);'>
-        <div class='dflex passador-intru'>
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(0)" style='opacity:0.01;'>
+        100% {
+          transform: scale(1.2);
+        }
+      }
+    </style>
+  </head>
 
-            <img src="../../img/ui/hand-point-right-solid.svg"
-              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
-            <div> RESUMIR JOGO </div>
-
-          </button>
-
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(2)">
-
-            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
-            <span> PRÓXIMO </span>
-
-          </button>
-        </div>
-      </div>
-      <img onclick="instrucoes(0); engine.onUnpauseGame();" src="../../img/ui/times-circle-solid.svg"
-        style='height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out;'>
-      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 1/3 </div>
+  <body>
+    <script src="../../src/babel/bundle.js"></script>
+    <div class="play" onclick="playMovie()">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        data-prefix="fas"
+        data-icon="play"
+        class="svg-inline--fa fa-play fa-w-14"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 448 512"
+      >
+        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+      </svg>
+      <div class="texto">Iniciar</div>
     </div>
 
-    <div class='instruction-page2-screen instruction-screen' style='display: none;'>
-      <img src="../../img/instructions/page2.png" style='max-width: 95%;' class='instru-pic'>
-
-      <div class='dflex flex-column'
-        style='width: 100%; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);'>
-        <div class='dflex passador-intru'>
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(1)">
-            <img src="../../img/ui/hand-point-right-solid.svg"
-              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
-            <div> VOLTAR </div>
-          </button>
-
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(3)">
-            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
-            <span> PRÓXIMO </span>
-          </button>
-        </div>
-      </div>
-      <img onclick="instrucoes(0); engine.onUnpauseGame();" src="../../img/ui/times-circle-solid.svg"
-        style='height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out;'>
-      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 2/3 </div>
+    <div id="btn-instru" onclick="instrucoes(1)">
+      <span class="noInteraction"> instruções </span>
     </div>
 
-    <div class='instruction-page3-screen instruction-screen' style='display: none;'>
-      <img src="../../img/instructions/page3.png" style='max-width: 95%;' class='instru-pic'>
+    <div class="interactableHUD">
+      <div class="instruction-page1-screen instruction-screen" style="display: none">
+        <img src="../../img/instructions/page1.png" style="max-width: 95%" class="instru-pic" />
 
-      <div class='dflex flex-column'
-        style='width: 100%; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);'>
-        <div class='dflex passador-intru'>
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(2)">
-            <img src="../../img/ui/hand-point-right-solid.svg"
-              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
-            <div> VOLTAR </div>
-          </button>
+        <div class="dflex flex-column" style="width: 100%; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%)">
+          <div class="dflex passador-intru">
+            <button class="retornar-btn btn-laranjado dflex" onclick="instrucoes(0)" style="opacity: 0.01">
+              <img src="../../img/ui/hand-point-right-solid.svg" style="transform: scaleX(-1); height: 25px; margin-right: 8px" />
+              <div>RESUMIR JOGO</div>
+            </button>
 
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(0)" style='opacity:0.01;'>
-            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
-            <div> RESUMIR JOGO </div>
-          </button>
+            <button class="retornar-btn btn-laranjado dflex" onclick="instrucoes(2)">
+              <img src="../../img/ui/hand-point-right-solid.svg" style="height: 25px; margin-right: 8px" />
+              <span> PRÓXIMO </span>
+            </button>
+          </div>
         </div>
+        <img
+          onclick="instrucoes(0); engine.onUnpauseGame();"
+          src="../../img/ui/times-circle-solid.svg"
+          style="height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out"
+        />
+        <div style="position: fixed; right: 46%; top: 8px; transform: translateX(-50%)">1/3</div>
       </div>
-      <img onclick="instrucoes(0); engine.onUnpauseGame();" src="../../img/ui/times-circle-solid.svg"
-        style='height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out;'>
-      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 3/3 </div>
+
+      <div class="instruction-page2-screen instruction-screen" style="display: none">
+        <img src="../../img/instructions/page2.png" style="max-width: 95%" class="instru-pic" />
+
+        <div class="dflex flex-column" style="width: 100%; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%)">
+          <div class="dflex passador-intru">
+            <button class="retornar-btn btn-laranjado dflex" onclick="instrucoes(1)">
+              <img src="../../img/ui/hand-point-right-solid.svg" style="transform: scaleX(-1); height: 25px; margin-right: 8px" />
+              <div>VOLTAR</div>
+            </button>
+
+            <button class="retornar-btn btn-laranjado dflex" onclick="instrucoes(0)">
+              <img src="../../img/ui/hand-point-right-solid.svg" style="height: 25px; margin-right: 8px" />
+              <span> PRÓXIMO </span>
+            </button>
+          </div>
+        </div>
+        <img
+          onclick="instrucoes(0); engine.onUnpauseGame();"
+          src="../../img/ui/times-circle-solid.svg"
+          style="height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out"
+        />
+        <div style="position: fixed; right: 46%; top: 8px; transform: translateX(-50%)">2/3</div>
+      </div>
     </div>
-  </div>
 
-  <div id='nextPage' onclick="loadNewScene('./Cenas/Stage1/index.html', 'landscape-primary')">
-    <img src="./img/nav-button.png">
-  </div>
+    <div id="nextPage" onclick="loadNewScene('./Cenas/Stage1/index.html', 'landscape-primary')">
+      <img src="./img/nav-button.png" />
+    </div>
 
-  <canvas id='canvas'> </canvas>
+    <canvas id="canvas"> </canvas>
 
-  <script src="animationPlayer_trans.js"> </script>
-  <script src="introduction_trans.js"> </script>
-</body>
-
+    <script src="animationPlayer_trans.js"></script>
+    <script src="introduction_trans.js"></script>
+  </body>
 </html>
